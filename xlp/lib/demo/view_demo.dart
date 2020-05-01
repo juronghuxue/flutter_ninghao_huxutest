@@ -6,7 +6,58 @@ class ViewDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return GridViewCountDemo();
+    return GridViewBilderDemo();
+  }
+}
+
+class GridViewBilderDemo extends StatelessWidget{
+  Widget _gridItemBuilder(BuildContext context,int index){
+    return Container(
+      child: Image.network(
+        posts[index].imageUrl,
+        fit:BoxFit.cover,
+      ),
+    );
+  }
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return GridView.builder(
+      padding:EdgeInsets.all(8.0),
+      itemCount: posts.length,
+      itemBuilder: _gridItemBuilder,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4,
+        crossAxisSpacing: 8.0,
+        mainAxisSpacing: 8.0,
+
+      ),
+    );
+  }
+}
+
+class GridViewExtentDemo extends StatelessWidget{
+  List<Widget> _buildTiles(int length){
+    return List.generate(length, (int index){
+      return Container(
+          color:Colors.grey[300],
+          alignment: Alignment(0.0, 0.0),
+          child: Text(
+            'Item $index',
+            style: TextStyle(fontSize:18.0,color:Colors.grey),
+          ),
+        );
+    } );
+  }
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return GridView.extent(
+      maxCrossAxisExtent: 150.0,
+      crossAxisSpacing: 16.0,
+      mainAxisSpacing: 16.0,
+      children: _buildTiles(100)
+    );
   }
 }
 
