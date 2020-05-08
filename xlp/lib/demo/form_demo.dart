@@ -13,10 +13,98 @@ class FormDemo extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              TextFieldDemo(),
+              // TextFieldDemo(),
+              RegisterForm(),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class RegisterForm extends StatefulWidget {
+  @override
+  RegisterFormState createState() => RegisterFormState();
+}
+
+class RegisterFormState extends State<RegisterForm> {
+  final registerFormKey = GlobalKey<FormState>();
+  String username,password;
+  bool autovalidate = false;
+
+
+  void submitRegisterForm(){
+    if(registerFormKey.currentState.validate()){
+      registerFormKey.currentState.save();
+      debugPrint('username: $username');
+      debugPrint('password: $password');
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content:Text('Registering ...')
+        ),
+      );
+    }else{
+      setState((){
+        autovalidate = true;
+      });
+    }
+  }
+
+  String validateUsername(value){
+    if(value.isEmpty){
+      return 'username is required.';
+    }
+    return null;
+  }
+
+  String validatePassword(value){
+    if(value.isEmpty){
+      return 'password is required.';
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key:registerFormKey,
+      child: Column(
+        children: <Widget>[
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Username',
+              helperText:''
+            ),
+            onSaved:(value){
+              username = value;
+            },
+            validator: validateUsername,
+            autovalidate: autovalidate,
+          ),
+          TextFormField(
+            obscureText: true,
+            decoration: InputDecoration(
+              labelText: 'Password',
+              helperText:''
+            ),
+            onSaved: (value){
+              password = value;
+            },
+            validator: validatePassword,
+            autovalidate:autovalidate,
+          ),
+          SizedBox(height:32.0),
+          Container(
+            width:double.infinity,
+            child: RaisedButton(
+              color:Theme.of(context).accentColor,
+              child:Text('Register',style:TextStyle(color:Colors.white)),
+              elevation: 0.0,
+              onPressed: submitRegisterForm,
+            ),
+          )
+        ],
       ),
     );
   }
@@ -27,9 +115,32 @@ class TextFieldDemo extends StatefulWidget {
 }
 
 class TextFieldDemoState extends State<TextFieldDemo> {
+  final textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // textEditingController.text = 'hi';
+    textEditingController.addListener(() {
+      debugPrint('input ${textEditingController.text}');
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: textEditingController,
+      // onChanged:(value) {
+      //   debugPrint('input:$value');
+      // } ,
+      onSubmitted: (value){
+        debugPrint('submit:$value');
+      },
       decoration: InputDecoration(
         icon:Icon(Icons.subject),
         labelText:'Title' ,
