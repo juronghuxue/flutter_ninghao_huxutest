@@ -11,6 +11,9 @@ import './date_time_demo.dart';
 import './simple_dialog_demo.dart';
 import './alert_dialog_demo.dart';
 import './bottom_sheet_demo.dart';
+import './snack_bar_demo.dart';
+import './expansion_panel_demo.dart';
+import './chip_demo.dart';
 class MaterialComponents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,6 +24,9 @@ class MaterialComponents extends StatelessWidget {
       ),
       body: ListView(
         children: <Widget>[
+          ListItem(title:'Chip',page:ChipDemo()),
+          ListItem(title:'ExpansionPanel',page:ExpansionPanelDemo()),
+          ListItem(title:'SnackBar',page:SnackBarDemo()),
           ListItem(title:'BottomSheet',page:BottomSheetDemo()),
           ListItem(title:'AlertDialog',page:AlertDialogDemo()),
           ListItem(title:'SimpleDialog',page:SimpleDialogDemo()),
