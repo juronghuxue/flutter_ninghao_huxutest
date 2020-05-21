@@ -1,0 +1,95 @@
+import 'package:flutter/material.dart';
+
+class AnimationDemo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('AnimationDemo'),
+        elevation: 0.0,
+      ),
+      body: AnimationDemoHome(),
+    );
+  }
+}
+
+class AnimationDemoHome extends StatefulWidget {
+  @override
+  _AnimationDemoHomeState createState() => _AnimationDemoHomeState();
+}
+
+class _AnimationDemoHomeState extends State<AnimationDemoHome> 
+with TickerProviderStateMixin{
+  AnimationController animationDemoController;
+  Animation animation;
+  Animation animationColor;
+  CurvedAnimation curved;
+  @override
+  void initState() {
+    super.initState();
+    animationDemoController = AnimationController(
+      // value:32.0,
+      // lowerBound: 32.0,
+      // upperBound: 100.0,
+      duration: Duration(milliseconds:1000),
+      vsync: this,
+    );
+    curved = CurvedAnimation(parent: animationDemoController,curve: Curves.bounceOut);
+    animation = Tween(begin:32.0,end:100.0).animate(curved);
+    animationColor = ColorTween(begin:Colors.red,end:Colors.red[900]).animate(animationDemoController);
+    // animationDemoController.addListener(() {
+    //   // print('${animationDemoController.value}');
+    //   setState(() {
+        
+    //   });
+    // });
+    animationDemoController.addStatusListener((status) {
+      print('$status');
+    });
+    // animationDemoController.forward();
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    animationDemoController.dispose();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: AnimatedHeard(
+        animations: [
+          animation,
+          animationColor,
+        ],
+        controller: animationDemoController,
+      )
+    );
+  }
+}
+
+class AnimatedHeard extends AnimatedWidget{
+  final List animations;
+  final AnimationController controller;
+  AnimatedHeard({
+    this.animations,
+    this.controller,
+  }):super(listenable:controller);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        icon:Icon(Icons.favorite),
+        color: animations[1].value,
+        iconSize: animations[0].value,
+        onPressed: (){
+          switch (controller.status) {
+            case AnimationStatus.completed:
+              controller.reverse();
+              break;
+            default:
+            controller.forward();
+          }
+        },
+      );
+  }
+}

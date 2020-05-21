@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:xlp/demo/state_management_demo.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import './demo/listview_demo.dart';
 import './demo/hello_demo.dart';
 import './demo/drawer_demo.dart';
@@ -15,15 +16,31 @@ import './demo/material_components.dart';
 import './demo/state_management_demo.dart';
 import './demo/stream/stream_demo.dart';
 import './demo/rxdart/rxdart_demo.dart';
+import './demo/bloc/bloc_demo.dart';
+import './demo/http/http_demo.dart';
+import './demo/animation/animation_demo.dart';
+import './demo/i18n/i18n_demo.dart';
 void main() => runApp(App());
 
 class App extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // locale: Locale('en','US'),
+      localeResolutionCallback:(Locale locale,Iterable<Locale> supportedLocales){
+        return Locale('en','US');
+      },
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('en','US'),
+        Locale('zh','CN')
+      ],
       debugShowCheckedModeBanner: false,
       // home:NavigatorDemo(),
-      initialRoute: '/rxdart',
+      initialRoute: '/i18n',
       routes: {
         '/':(context) => Home(),
         '/about':(context) => Page2(title:'About'),
@@ -32,6 +49,10 @@ class App extends StatelessWidget{
         '/state-management':(context) => StateManagementDemo(),
         '/stream':(context) => StreamDemo(),
         '/rxdart':(context) => RxDartDemo(),
+        '/bloc':(context) => BlocDemo(),
+        '/http':(context) => HttpDemo(),
+        '/animation':(context) => AnimationDemo(),
+        '/i18n':(context) => I18nDemo(),
       },
       theme:ThemeData(
         primarySwatch: Colors.yellow,
